@@ -5,10 +5,10 @@ class Book {
   final int num_found;
   final String documentation_url;
   final String q;
-  final dynamic offset;
+  final int? offset;
   final List<Docs> docs;
 
-  Book({required this.numFound, required this.start, required this.numFoundExact, required this.num_found, required this.documentation_url, required this.q, required this.offset, required this.docs});
+  Book({required this.numFound, required this.start, required this.numFoundExact, required this.num_found, required this.documentation_url, required this.q, this.offset, required this.docs});
 
   factory Book.fromJson(Map<String, dynamic> json) => Book(
     numFound: json['numFound'] as int,
@@ -17,8 +17,8 @@ class Book {
     num_found: json['num_found'] as int,
     documentation_url: json['documentation_url'] as String,
     q: json['q'] as String,
-    offset: json['offset'],
-    docs: (json['docs'] as List).map((e) => Docs.fromJson(e as Map<String, dynamic>)).toList()
+    offset: json['offset'] as int?,
+    docs: (json['docs'] as List? ?? []).map((e) => Docs.fromJson(e as Map<String, dynamic>)).toList()
   );
 
   Map<String, dynamic> toJson() => {
@@ -54,24 +54,31 @@ class Docs {
 
   Docs({required this.author_key, required this.author_name, required this.cover_edition_key, required this.cover_i, required this.ebook_access, required this.edition_count, required this.first_publish_year, required this.has_fulltext, required this.ia, required this.ia_collection, required this.key, required this.language, required this.lending_edition_s, required this.lending_identifier_s, required this.public_scan_b, required this.title, required this.id_standard_ebooks});
 
+  static List<String> _stringList(dynamic value) {
+    if (value is List) {
+      return value.whereType<String>().toList();
+    }
+    return [];
+  }
+
   factory Docs.fromJson(Map<String, dynamic> json) => Docs(
-    author_key: List<String>.from(json['author_key']),
-    author_name: List<String>.from(json['author_name']),
-    cover_edition_key: json['cover_edition_key'] as String,
-    cover_i: json['cover_i'] as int,
-    ebook_access: json['ebook_access'] as String,
-    edition_count: json['edition_count'] as int,
-    first_publish_year: json['first_publish_year'] as int,
-    has_fulltext: json['has_fulltext'] as bool,
-    ia: List<String>.from(json['ia']),
-    ia_collection: List<String>.from(json['ia_collection']),
-    key: json['key'] as String,
-    language: List<String>.from(json['language']),
-    lending_edition_s: json['lending_edition_s'] as String,
-    lending_identifier_s: json['lending_identifier_s'] as String,
-    public_scan_b: json['public_scan_b'] as bool,
-    title: json['title'] as String,
-    id_standard_ebooks: List<String>.from(json['id_standard_ebooks'])
+    author_key: _stringList(json['author_key']),
+    author_name: _stringList(json['author_name']),
+    cover_edition_key: json['cover_edition_key'] as String? ?? '',
+    cover_i: json['cover_i'] as int? ?? 0,
+    ebook_access: json['ebook_access'] as String? ?? '',
+    edition_count: json['edition_count'] as int? ?? 0,
+    first_publish_year: json['first_publish_year'] as int? ?? 0,
+    has_fulltext: json['has_fulltext'] as bool? ?? false,
+    ia: _stringList(json['ia']),
+    ia_collection: _stringList(json['ia_collection']),
+    key: json['key'] as String? ?? '',
+    language: _stringList(json['language']),
+    lending_edition_s: json['lending_edition_s'] as String? ?? '',
+    lending_identifier_s: json['lending_identifier_s'] as String? ?? '',
+    public_scan_b: json['public_scan_b'] as bool? ?? false,
+    title: json['title'] as String? ?? '',
+    id_standard_ebooks: _stringList(json['id_standard_ebooks'])
   );
 
   Map<String, dynamic> toJson() => {

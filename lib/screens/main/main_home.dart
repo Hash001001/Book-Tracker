@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_book_reader/models/book.dart';
-import 'package:flutter_book_reader/network/network.dart';
 import 'package:flutter_book_reader/screens/favorites_screen.dart';
 import 'package:flutter_book_reader/screens/home_screen.dart';
 import 'package:flutter_book_reader/screens/save_screen.dart';
@@ -14,27 +12,12 @@ class MainHome extends StatefulWidget {
 
 class _MainHomeState extends State<MainHome> {
   int currentIndex = 0;
-  Network network = Network();
-
-  Future<void> serachBooks(String query) async {
-    try {
-      List<Docs> books = await network.searchBooks(query);
-    } catch (e) {
-      print("Error occurred while searching books: $e");
-    }
-  }
 
   final List<Widget> _screens = [
     const HomeScreen(),
     const SavedScreen(),
     const FavoritesScreen(),
   ];
-
-  @override
-  void initState() {
-    serachBooks("Islam is love");
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
