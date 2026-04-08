@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_book_reader/home.dart';
+import 'package:flutter_book_reader/screens/main/main_home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,11 +12,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Colors.orange[400]!),
+        colorScheme: .fromSeed(seedColor: Colors.orangeAccent),
       ),
-      home: const Home(),
+      home: const MainHome(),
     );
   }
 }
