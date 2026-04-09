@@ -1,39 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_book_reader/models/book.dart';
 import 'package:flutter_book_reader/network/network.dart';
+import 'package:flutter_book_reader/providers/home_provider.dart';
 import 'package:flutter_book_reader/widgets/shimmer.dart';
+import 'package:provider/provider.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  Network network = Network();
-  List<Docs> _booksList = [];
-  bool _isLoading = false;
-  Future<void> serachBooks(String query) async {
-    try {
-      setState(() {
-        _isLoading = true;
-      });
-      List<Docs> books = await network.searchBooks(query);
-      setState(() {
-        _isLoading = false;
-        _booksList = books;
-      });
-    } catch (e) {
-      _isLoading = false;
-      print("Error occurred while searching books: $e");
-    }
-
-    setState(() {});
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final homeProvider = context.watch<HomeScreenProvider>();
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -51,17 +29,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     suffixIcon: Icon(Icons.search),
                   ),
                   onSubmitted: (value) {
-                    serachBooks(value);
+                    context.read<HomeScreenProvider>().serachBooks(value);
                   },
                 ),
               ),
 
               SizedBox(height: 20),
               Expanded(
-                child: _isLoading ? Center(
+                child: homeProvider.isLoading ? Center(
                   child: CircularProgressIndicator(),
                 ) : GridView.builder(
-                  itemCount: _booksList.length,
+                  itemCount: homeProvider.booksList.length,
                   padding: const EdgeInsets.all(8),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
@@ -76,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   addRepaintBoundaries: true,
 
                   itemBuilder: (context, index) {
-                    Docs bookData = _booksList[index];
+                    Docs bookData = homeProvider.booksList[index];
 
                     return Container(
                       decoration: BoxDecoration(
