@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_book_reader/providers/home_provider.dart';
 import 'package:flutter_book_reader/screens/main/main_home.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(create: (context) => HomeScreenProvider(), child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

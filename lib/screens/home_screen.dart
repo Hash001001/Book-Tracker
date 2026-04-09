@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_book_reader/models/book.dart';
 import 'package:flutter_book_reader/network/network.dart';
 import 'package:flutter_book_reader/widgets/shimmer.dart';
-import 'package:shimmer/shimmer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
