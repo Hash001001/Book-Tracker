@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_book_reader/models/book.dart';
 import 'package:flutter_book_reader/network/network.dart';
 import 'package:flutter_book_reader/providers/home_provider.dart';
+import 'package:flutter_book_reader/screens/book_details.dart';
+import 'package:flutter_book_reader/utils/book_details_arguments.dart';
 import 'package:flutter_book_reader/widgets/shimmer.dart';
 import 'package:provider/provider.dart';
 
@@ -36,139 +38,164 @@ class HomeScreen extends StatelessWidget {
 
               SizedBox(height: 20),
               Expanded(
-                child: homeProvider.isLoading ? Center(
-                  child: CircularProgressIndicator(),
-                ) : GridView.builder(
-                  itemCount: homeProvider.booksList.length,
-                  padding: const EdgeInsets.all(8),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.58,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                  ),
-
-                  // 🚀 PERFORMANCE BOOST
-                  cacheExtent: 1000,
-                  addAutomaticKeepAlives: false,
-                  addRepaintBoundaries: true,
-
-                  itemBuilder: (context, index) {
-                    Docs bookData = homeProvider.booksList[index];
-
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surface,
-                        borderRadius: BorderRadius.circular(12),
-
-                        // 🎨 Play Store shadow
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
-                            blurRadius: 6,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          /// 📘 BOOK COVER
-                          ClipRRect(
-                            borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(12),
+                child: homeProvider.isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : GridView.builder(
+                        itemCount: homeProvider.booksList.length,
+                        padding: const EdgeInsets.all(8),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.58,
+                              crossAxisSpacing: 8,
+                              mainAxisSpacing: 8,
                             ),
-                            child: Image.network(
-                              bookData.cover_i != null
-                                  ? "${Network.thumbNailBaseUrl}${bookData.cover_i}.jpg"
-                                  : "https://via.placeholder.com/150",
 
-                              height: 200,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
+                        // 🚀 PERFORMANCE BOOST
+                        cacheExtent: 1000,
+                        addAutomaticKeepAlives: false,
+                        addRepaintBoundaries: true,
 
-                              // 🚀 PERFORMANCE
-                              cacheWidth: 300,
+                        itemBuilder: (context, index) {
+                          Docs bookData = homeProvider.booksList[index];
 
-                              /// ✨ FADE IN
-                              frameBuilder:
-                                  (
-                                    context,
-                                    child,
-                                    frame,
-                                    wasSynchronouslyLoaded,
-                                  ) {
-                                    if (wasSynchronouslyLoaded) return child;
-
-                                    return AnimatedOpacity(
-                                      opacity: frame == null ? 0 : 1,
-                                      duration: const Duration(
-                                        milliseconds: 300,
-                                      ),
-                                      child: child,
-                                    );
-                                  },
-
-                              /// 🔥 SHIMMER LOADER
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                                    if (loadingProgress == null) return child;
-
-                                    return ShimmerEffect();
-                                  },
-
-                              /// ❌ ERROR UI
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  height: 200,
-                                  color: Colors.grey[300],
-                                  child: const Center(
-                                    child: Icon(Icons.broken_image, size: 40),
+                          return Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(8),
+                              onTap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  '/details',
+                                  arguments: BookDetailArguments(
+                                    bookData: bookData,
                                   ),
                                 );
                               },
-                            ),
-                          ),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.surface,
+                                  borderRadius: BorderRadius.circular(12),
 
-                          /// 📄 BOOK INFO
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  bookData.title ?? "No Title",
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  ),
+                                  // 🎨 Play Store shadow
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.08),
+                                      blurRadius: 6,
+                                      offset: const Offset(0, 3),
+                                    ),
+                                  ],
                                 ),
 
-                                const SizedBox(height: 4),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    /// 📘 BOOK COVER
+                                    ClipRRect(
+                                      borderRadius: const BorderRadius.vertical(
+                                        top: Radius.circular(12),
+                                      ),
+                                      child: Image.network(
+                                        bookData.cover_i != null
+                                            ? "${Network.thumbNailBaseUrl}${bookData.cover_i}.jpg"
+                                            : "https://via.placeholder.com/150",
 
-                                Text(
-                                  (bookData.author_name != null &&
-                                          bookData.author_name!.isNotEmpty)
-                                      ? bookData.author_name![0]
-                                      : "Unknown Author",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: 12,
-                                  ),
+                                        height: 200,
+                                        width: double.infinity,
+                                        fit: BoxFit.cover,
+
+                                        // 🚀 PERFORMANCE
+                                        cacheWidth: 300,
+
+                                        /// ✨ FADE IN
+                                        frameBuilder:
+                                            (
+                                              context,
+                                              child,
+                                              frame,
+                                              wasSynchronouslyLoaded,
+                                            ) {
+                                              if (wasSynchronouslyLoaded)
+                                                return child;
+
+                                              return AnimatedOpacity(
+                                                opacity: frame == null ? 0 : 1,
+                                                duration: const Duration(
+                                                  milliseconds: 300,
+                                                ),
+                                                child: child,
+                                              );
+                                            },
+
+                                        /// 🔥 SHIMMER LOADER
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) {
+                                              if (loadingProgress == null)
+                                                return child;
+
+                                              return ShimmerEffect();
+                                            },
+
+                                        /// ❌ ERROR UI
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                              return Container(
+                                                height: 200,
+                                                color: Colors.grey[300],
+                                                child: const Center(
+                                                  child: Icon(
+                                                    Icons.broken_image,
+                                                    size: 40,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                      ),
+                                    ),
+
+                                    /// 📄 BOOK INFO
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            bookData.title ?? "No Title",
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+
+                                          const SizedBox(height: 4),
+
+                                          Text(
+                                            (bookData.author_name != null &&
+                                                    bookData
+                                                        .author_name!
+                                                        .isNotEmpty)
+                                                ? bookData.author_name![0]
+                                                : "Unknown Author",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              color: Colors.grey[600],
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ],
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
               ),
             ],
           ),
@@ -177,5 +204,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
-

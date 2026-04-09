@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_book_reader/providers/home_provider.dart';
+import 'package:flutter_book_reader/screens/book_details.dart';
+import 'package:flutter_book_reader/screens/favorites_screen.dart';
+import 'package:flutter_book_reader/screens/home_screen.dart';
 import 'package:flutter_book_reader/screens/main/main_home.dart';
+import 'package:flutter_book_reader/screens/save_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -19,6 +23,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.orangeAccent),
       ),
+      initialRoute: '/',
+      routes: {
+        "/home": (context) => HomeScreen(),
+        "/saved": (context) => SavedScreen(),
+        "/favorites": (context) => FavoritesScreen(),
+        "/details": (context) => BookDetailsScreen(),
+      },
       home: const MainHome(),
     );
   }
