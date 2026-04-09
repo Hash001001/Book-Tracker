@@ -70,13 +70,64 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Container(
                         padding: EdgeInsets.all(2),
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.inversePrimary,
+                          color: Theme.of(context).colorScheme.onInverseSurface,
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Column(
                           children: [
-                            Image.network(
-                              "${Network.thumbNailBaseUrl}${bookData.cover_i}.jpg",
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              clipBehavior: Clip.antiAlias,
+                              child: Image.network(
+                                bookData.cover_i != null
+                                    ? "${Network.thumbNailBaseUrl}${bookData.cover_i}.jpg"
+                                    : "https://via.placeholder.com/150",
+
+                                height: 250,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+
+                                // 🔥 Shows instantly
+                                frameBuilder:
+                                    (
+                                      context,
+                                      child,
+                                      frame,
+                                      wasSynchronouslyLoaded,
+                                    ) {
+                                      if (wasSynchronouslyLoaded) return child;
+
+                                      return AnimatedOpacity(
+                                        opacity: frame == null ? 0 : 1,
+                                        duration: const Duration(
+                                          milliseconds: 300,
+                                        ),
+                                        child: child,
+                                      );
+                                    },
+
+                                // ⏳ Loader
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+
+                                      return SizedBox(
+                                        height: 150,
+                                        child: Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      );
+                                    },
+
+                                // ❌ Error UI (faster feedback)
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    height: 150,
+                                    color: Colors.grey[300],
+                                    child: const Icon(Icons.broken_image),
+                                  );
+                                },
+                              ),
                             ),
                           ],
                         ),
