@@ -71,14 +71,42 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
 
               SizedBox(height: 10),
 
-              Row(children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(onPressed: () {}, child: Text("Save")),
 
-              ElevatedButton(onPressed: (){}, child: Text("Save"),),
-
-            
-
+                  ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: Icon(Icons.favorite),
+                    label: Text("Favorite"),
+                  ),
                 ],
               ),
+
+              SizedBox(height: 15),
+
+              Text(
+                "Description",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              SizedBox(height: 5),
+
+              bookData.ia_collection.isNotEmpty ?
+                Container(
+                margin: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.secondary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                  border: BoxBorder.all(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+                padding: EdgeInsets.all(8),
+                child: bookData.ia_collection.isNotEmpty ? Text(bookData.ia_collection.join(', ')) : Text(""),
+              ) : Center(child: Text("No description available")),
             ],
           ),
         ),
