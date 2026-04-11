@@ -8,7 +8,12 @@ import 'package:flutter_book_reader/screens/save_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(create: (context) => HomeScreenProvider(), child: MyApp()));
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => HomeScreenProvider(),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -34,4 +39,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

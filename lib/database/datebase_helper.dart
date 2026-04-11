@@ -45,7 +45,7 @@ CREATE TABLE $tableName (
   }
 
   //insert books
-  Future<int?> inserBook(Docs docs) async {
+  Future<int> inserBook(Docs docs) async {
     var db = await instance.database;
     return await db.insert(tableName, docs.toJson());
   }

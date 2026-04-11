@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_book_reader/database/datebase_helper.dart';
 import 'package:flutter_book_reader/models/book.dart';
 import 'package:flutter_book_reader/utils/book_details_arguments.dart';
 import 'package:flutter_book_reader/widgets/image_view.dart';
@@ -74,7 +75,25 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ElevatedButton(onPressed: () {}, child: Text("Save")),
+                  ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        int savedbook = await DataBaseHelper.instance.inserBook(
+                          bookData,
+                        );
+
+                        SnackBar snackBar = SnackBar(
+                          content: Text(
+                            savedbook > 0
+                                ? "Book saved successfully"
+                                : "Failed to save book",
+                          ),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      } catch (e) {}
+                    },
+                    child: Text("Save"),
+                  ),
 
                   ElevatedButton.icon(
                     onPressed: () {},
@@ -92,21 +111,24 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
               ),
               SizedBox(height: 5),
 
-              bookData.ia_collection.isNotEmpty ?
-                Container(
-                margin: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.secondary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                  border: BoxBorder.all(
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                ),
-                padding: EdgeInsets.all(8),
-                child: bookData.ia_collection.isNotEmpty ? Text(bookData.ia_collection.join(', ')) : Text(""),
-              ) : Center(child: Text("No description available")),
+              bookData.ia_collection.isNotEmpty
+                  ? Container(
+                      margin: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.secondary.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                        border: BoxBorder.all(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                      padding: EdgeInsets.all(8),
+                      child: bookData.ia_collection.isNotEmpty
+                          ? Text(bookData.ia_collection.join(', '))
+                          : Text(""),
+                    )
+                  : Center(child: Text("No description available")),
             ],
           ),
         ),
