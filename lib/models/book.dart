@@ -61,6 +61,11 @@ class Docs {
     return [];
   }
 
+static List<String> _splitList(dynamic value) {
+    if (value == null || value.toString().isEmpty) return [];
+    return value.toString().split(',');
+  }
+
   factory Docs.fromJson(Map<String, dynamic> json) => Docs(
     author_key: _stringList(json['author_key']),
     author_name: _stringList(json['author_name']),
@@ -102,24 +107,27 @@ class Docs {
   };
 
 factory Docs.fromDb(Map<String, dynamic> map) => Docs(
-    author_key:           _stringList(map['author_keys']),
-    author_name:          _stringList(map['author_names']),
+    author_key:           _splitList(map['author_key']),
+    author_name:          _splitList(map['author_name']),
     cover_edition_key:    map['cover_edition_key'] as String? ?? '',
     cover_i:              map['cover_i'] as int? ?? 0,
     ebook_access:         map['ebook_access'] as String? ?? '',
     edition_count:        map['edition_count'] as int? ?? 0,
     first_publish_year:   map['first_publish_year'] as int? ?? 0,
     has_fulltext:         (map['has_fulltext'] as int? ?? 0) == 1,  // ✅ int → bool
-    ia:                   _stringList(map['ia']),
-    ia_collection:        _stringList(map['ia_collection']),
+    ia:                   _splitList(map['ia']),
+    ia_collection:        _splitList(map['ia_collection']),
     key:                  map['doc_key'] as String? ?? '',
-    language:             _stringList(map['languages']),
+    language:             _splitList(map['language']),
     lending_edition_s:    map['lending_edition_s'] as String? ?? '',
     lending_identifier_s: map['lending_identifier_s'] as String? ?? '',
     public_scan_b:        (map['public_scan_b'] as int? ?? 0) == 1, // ✅ int → bool
     title:                map['title'] as String? ?? '',
-    id_standard_ebooks:   _stringList(map['id_standard_ebooks']),
+    id_standard_ebooks:   _splitList(map['id_standard_ebooks']),
   );
+
+
+
 
 Map<String, dynamic> toDb() => {
     'author_key':          author_key.join(','),

@@ -23,7 +23,7 @@ class _SavedScreenState extends State<SavedScreen> {
                 itemCount: snapshot.data?.length,
                 itemBuilder: (context, index) {
                   Docs bookData = snapshot.data![index];
-                  print("imgae url -> ${bookData.author_name[0]}");
+                  print("Author name -> ${bookData.author_key.toString()}");
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Card(
