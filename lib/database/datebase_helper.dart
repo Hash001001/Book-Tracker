@@ -75,6 +75,18 @@ CREATE TABLE $tableName (
         : [];
   }
 
+  //get all favorites
+  Future<List<Docs>> getAllFavorites() async {
+    var db = await instance.database;
+    var result = await db.query(tableName, where: "is_favorite = ?", whereArgs: [1]);
+
+    return result.isNotEmpty
+        ? result
+              .map((book) => Docs.fromDb(book as Map<String, dynamic>))
+              .toList()
+        : [];
+  }
+
   //mark book favorite
 
   Future<int> markBookAsFavorite(String key, bool isfavorite) async {
