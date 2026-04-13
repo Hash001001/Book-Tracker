@@ -100,4 +100,44 @@ class Docs {
     'title': title,
     'id_standard_ebooks': id_standard_ebooks.join(',')
   };
+
+factory Docs.fromDb(Map<String, dynamic> map) => Docs(
+    author_key:           _stringList(map['author_keys']),
+    author_name:          _stringList(map['author_names']),
+    cover_edition_key:    map['cover_edition_key'] as String? ?? '',
+    cover_i:              map['cover_i'] as int? ?? 0,
+    ebook_access:         map['ebook_access'] as String? ?? '',
+    edition_count:        map['edition_count'] as int? ?? 0,
+    first_publish_year:   map['first_publish_year'] as int? ?? 0,
+    has_fulltext:         (map['has_fulltext'] as int? ?? 0) == 1,  // ✅ int → bool
+    ia:                   _stringList(map['ia']),
+    ia_collection:        _stringList(map['ia_collection']),
+    key:                  map['doc_key'] as String? ?? '',
+    language:             _stringList(map['languages']),
+    lending_edition_s:    map['lending_edition_s'] as String? ?? '',
+    lending_identifier_s: map['lending_identifier_s'] as String? ?? '',
+    public_scan_b:        (map['public_scan_b'] as int? ?? 0) == 1, // ✅ int → bool
+    title:                map['title'] as String? ?? '',
+    id_standard_ebooks:   _stringList(map['id_standard_ebooks']),
+  );
+
+Map<String, dynamic> toDb() => {
+    'author_key':          author_key.join(','),
+    'author_name':         author_name.join(','),
+    'cover_edition_key':    cover_edition_key,
+    'cover_i':              cover_i,
+    'ebook_access':         ebook_access,
+    'edition_count':        edition_count,
+    'first_publish_year':   first_publish_year,
+    'has_fulltext':         has_fulltext ? 1 : 0,   // ✅ bool → int
+    'ia':                   ia.join(','),
+    'ia_collection':        ia_collection.join(','),
+    'language':             language.join(','),
+    'lending_edition_s':    lending_edition_s,
+    'lending_identifier_s': lending_identifier_s,
+    'public_scan_b':        public_scan_b ? 1 : 0,  // ✅ bool → int
+    'title':                title,
+    'id_standard_ebooks':   id_standard_ebooks.join(','),
+  };
+
 }

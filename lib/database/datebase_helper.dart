@@ -59,7 +59,7 @@ CREATE TABLE $tableName (
   //insert books
   Future<int> inserBook(Docs docs) async {
     var db = await instance.database;
-    return await db.insert(tableName, docs.toJson());
+    return await db.insert(tableName, docs.toDb());
   }
 
   //read books
@@ -70,7 +70,7 @@ CREATE TABLE $tableName (
 
     return result.isNotEmpty
         ? result
-              .map((book) => Docs.fromJson(book as Map<String, dynamic>))
+              .map((book) => Docs.fromDb(book as Map<String, dynamic>))
               .toList()
         : [];
   }
