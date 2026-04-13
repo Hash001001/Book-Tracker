@@ -32,15 +32,27 @@ class DataBaseHelper {
   Future _oncreate(Database db, int version) async {
     await db.execute('''
 CREATE TABLE $tableName (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT NOT NULL,
-    author TEXT,
-    cover_id INTEGER UNIQUE,
-    description TEXT,
-    publish_year INTEGER,
-    is_favorite INTEGER DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+        id                   INTEGER PRIMARY KEY AUTOINCREMENT,
+        title                TEXT NOT NULL,
+        author_name         TEXT,
+        author_key          TEXT,
+        cover_edition_key    TEXT,
+        cover_i              INTEGER DEFAULT 0,
+        ebook_access         TEXT,
+        edition_count        INTEGER DEFAULT 0,
+        first_publish_year   INTEGER DEFAULT 0,
+        has_fulltext         INTEGER DEFAULT 0,
+        lending_edition_s    TEXT,
+        lending_identifier_s TEXT,
+        public_scan_b        INTEGER DEFAULT 0,
+        language            TEXT,
+        ia                   TEXT,
+        ia_collection        TEXT,
+        id_standard_ebooks   TEXT,
+        key   TEXT,
+        is_favorite          INTEGER DEFAULT 0,
+        created_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
 ''');
   }
 

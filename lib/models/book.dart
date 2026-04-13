@@ -82,22 +82,22 @@ class Docs {
   );
 
   Map<String, dynamic> toJson() => {
-    'author_key': author_key,
-    'author_name': author_name,
+    'author_key': author_key.join(','),
+    'author_name':  author_name.join(','),
     'cover_edition_key': cover_edition_key,
     'cover_i': cover_i,
     'ebook_access': ebook_access,
     'edition_count': edition_count,
     'first_publish_year': first_publish_year,
     'has_fulltext': has_fulltext,
-    'ia': ia,
-    'ia_collection': ia_collection,
+    'ia': ia.join(','),
+    'ia_collection': ia_collection.join(','),
     'key': key,
-    'language': language,
+    'language': language.join(','),
     'lending_edition_s': lending_edition_s,
     'lending_identifier_s': lending_identifier_s,
     'public_scan_b': public_scan_b,
     'title': title,
-    'id_standard_ebooks': id_standard_ebooks
+    'id_standard_ebooks': id_standard_ebooks.join(',')
   };
 }

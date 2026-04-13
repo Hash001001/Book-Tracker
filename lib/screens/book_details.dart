@@ -85,12 +85,14 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                         SnackBar snackBar = SnackBar(
                           content: Text(
                             savedbook > 0
-                                ? "Book saved successfully"
+                                ? "Book saved successfully: $savedbook"
                                 : "Failed to save book",
                           ),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      } catch (e) {}
+                      } catch (e) {
+                        print("Error while saving $e");
+                      }
                     },
                     child: Text("Save"),
                   ),
