@@ -51,7 +51,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               },
             );
           } else {
-            return Text("No Favorite book");
+            return Center(child: Text("No Favorite book", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),));
           }
         },
       ),
