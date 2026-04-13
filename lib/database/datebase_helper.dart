@@ -74,4 +74,16 @@ CREATE TABLE $tableName (
               .toList()
         : [];
   }
+
+  //mark book favorite
+
+  Future<int> markBookAsFavorite(String id, bool isfavorite) async {
+    var db = await instance.database;
+    return db.update(
+      tableName,
+      {"is_favorite": isfavorite ? 1 : 0},
+      where: "id = ?",
+      whereArgs: [id],
+    );
+  }
 }
