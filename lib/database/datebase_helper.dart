@@ -77,13 +77,24 @@ CREATE TABLE $tableName (
 
   //mark book favorite
 
-  Future<int> markBookAsFavorite(String id, bool isfavorite) async {
+  Future<int> markBookAsFavorite(String key, bool isfavorite) async {
     var db = await instance.database;
     return db.update(
       tableName,
       {"is_favorite": isfavorite ? 1 : 0},
-      where: "id = ?",
-      whereArgs: [id],
+      where: "key = ?",
+      whereArgs: [key],
     );
   }
+
+
+  Future<int> deleteBook(String key, ) async {
+    var db = await instance.database;
+    return db.delete(
+      tableName,
+      where: "key = ?",
+      whereArgs: [key],
+    );
+  }
+
 }

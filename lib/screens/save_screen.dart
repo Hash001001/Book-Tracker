@@ -23,7 +23,7 @@ class _SavedScreenState extends State<SavedScreen> {
                 itemCount: snapshot.data?.length,
                 itemBuilder: (context, index) {
                   Docs bookData = snapshot.data![index];
-                  print("Author name -> ${bookData.author_key.toString()}");
+                  print("Key -> ${bookData.key.toString()}");
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Card(
@@ -35,10 +35,18 @@ class _SavedScreenState extends State<SavedScreen> {
                             fontSize: 16,
                           ),
                         ),
-                        trailing: Icon(Icons.delete),
-                      
+                        trailing: IconButton(
+                          onPressed: () async {
+                            await DataBaseHelper.instance
+                                .deleteBook(bookData.key)
+                                .then((value) {
+                                  setState(() {});
+                                });
+                          },
+                          icon: Icon(Icons.delete),
+                        ),
+
                         leading: Image.network(
-                          
                           (bookData.cover_i != null && bookData.cover_i != 0)
                               ? "${Network.thumbNailBaseUrl}${bookData.cover_i}.jpg"
                               : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcGGf2dRY9hLwwz55FU4ltpJOkgU5ct58HdiibuKhW88Np-5Y5fTB_aEstTls00NmYLsZT6_7qQLy27sR0a2C7K80&s&ec=121630516",
@@ -51,14 +59,25 @@ class _SavedScreenState extends State<SavedScreen> {
                             Text(bookData.author_name.join(', ')),
                             ElevatedButton.icon(
                               icon: Icon(
-                                Icons.favorite,
+                                bookData.is_favorite
+                                    ? Icons.favorite
+                                    : Icons.favorite_border_outlined,
                                 color: CupertinoColors.lightBackgroundGray,
                               ),
                               onPressed: () async {
-
-                              
-
-
+                                await DataBaseHelper.instance
+                                    .markBookAsFavorite(
+                                      bookData.key,
+                                      !bookData.is_favorite,
+                                    )
+                                    .then(
+                                      (onValue) => {
+                                        setState(() {
+                                          bookData.is_favorite =
+                                              !bookData.is_favorite;
+                                        }),
+                                      },
+                                    );
                               },
                               label: Text(
                                 "Add to Favorite",

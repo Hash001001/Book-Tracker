@@ -8,7 +8,16 @@ class Book {
   final int? offset;
   final List<Docs> docs;
 
-  Book({required this.numFound, required this.start, required this.numFoundExact, required this.num_found, required this.documentation_url, required this.q, this.offset, required this.docs});
+  Book({
+    required this.numFound,
+    required this.start,
+    required this.numFoundExact,
+    required this.num_found,
+    required this.documentation_url,
+    required this.q,
+    this.offset,
+    required this.docs,
+  });
 
   factory Book.fromJson(Map<String, dynamic> json) => Book(
     numFound: json['numFound'] as int,
@@ -18,7 +27,9 @@ class Book {
     documentation_url: json['documentation_url'] as String,
     q: json['q'] as String,
     offset: json['offset'] as int?,
-    docs: (json['docs'] as List? ?? []).map((e) => Docs.fromJson(e as Map<String, dynamic>)).toList()
+    docs: (json['docs'] as List? ?? [])
+        .map((e) => Docs.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 
   Map<String, dynamic> toJson() => {
@@ -29,7 +40,7 @@ class Book {
     'documentation_url': documentation_url,
     'q': q,
     'offset': offset,
-    'docs': docs.map((e) => e.toJson()).toList()
+    'docs': docs.map((e) => e.toJson()).toList(),
   };
 }
 
@@ -51,8 +62,28 @@ class Docs {
   final bool public_scan_b;
   final String title;
   final List<String> id_standard_ebooks;
+  bool is_favorite;
 
-  Docs({required this.author_key, required this.author_name, required this.cover_edition_key, required this.cover_i, required this.ebook_access, required this.edition_count, required this.first_publish_year, required this.has_fulltext, required this.ia, required this.ia_collection, required this.key, required this.language, required this.lending_edition_s, required this.lending_identifier_s, required this.public_scan_b, required this.title, required this.id_standard_ebooks});
+  Docs({
+    required this.author_key,
+    required this.author_name,
+    required this.cover_edition_key,
+    required this.cover_i,
+    required this.ebook_access,
+    required this.edition_count,
+    required this.first_publish_year,
+    required this.has_fulltext,
+    required this.ia,
+    required this.ia_collection,
+    required this.key,
+    required this.language,
+    required this.lending_edition_s,
+    required this.lending_identifier_s,
+    required this.public_scan_b,
+    required this.title,
+    required this.id_standard_ebooks,
+    this.is_favorite = false,
+  });
 
   static List<String> _stringList(dynamic value) {
     if (value is List) {
@@ -61,7 +92,7 @@ class Docs {
     return [];
   }
 
-static List<String> _splitList(dynamic value) {
+  static List<String> _splitList(dynamic value) {
     if (value == null || value.toString().isEmpty) return [];
     return value.toString().split(',');
   }
@@ -83,12 +114,13 @@ static List<String> _splitList(dynamic value) {
     lending_identifier_s: json['lending_identifier_s'] as String? ?? '',
     public_scan_b: json['public_scan_b'] as bool? ?? false,
     title: json['title'] as String? ?? '',
-    id_standard_ebooks: _stringList(json['id_standard_ebooks'])
+    id_standard_ebooks: _stringList(json['id_standard_ebooks']),
+    is_favorite: false, 
   );
 
   Map<String, dynamic> toJson() => {
     'author_key': author_key.join(','),
-    'author_name':  author_name.join(','),
+    'author_name': author_name.join(','),
     'cover_edition_key': cover_edition_key,
     'cover_i': cover_i,
     'ebook_access': ebook_access,
@@ -103,49 +135,48 @@ static List<String> _splitList(dynamic value) {
     'lending_identifier_s': lending_identifier_s,
     'public_scan_b': public_scan_b,
     'title': title,
-    'id_standard_ebooks': id_standard_ebooks.join(',')
+    'id_standard_ebooks': id_standard_ebooks.join(','),
   };
 
-factory Docs.fromDb(Map<String, dynamic> map) => Docs(
-    author_key:           _splitList(map['author_key']),
-    author_name:          _splitList(map['author_name']),
-    cover_edition_key:    map['cover_edition_key'] as String? ?? '',
-    cover_i:              map['cover_i'] as int? ?? 0,
-    ebook_access:         map['ebook_access'] as String? ?? '',
-    edition_count:        map['edition_count'] as int? ?? 0,
-    first_publish_year:   map['first_publish_year'] as int? ?? 0,
-    has_fulltext:         (map['has_fulltext'] as int? ?? 0) == 1,  // ✅ int → bool
-    ia:                   _splitList(map['ia']),
-    ia_collection:        _splitList(map['ia_collection']),
-    key:                  map['doc_key'] as String? ?? '',
-    language:             _splitList(map['language']),
-    lending_edition_s:    map['lending_edition_s'] as String? ?? '',
+  factory Docs.fromDb(Map<String, dynamic> map) => Docs(
+    author_key: _splitList(map['author_key']),
+    author_name: _splitList(map['author_name']),
+    cover_edition_key: map['cover_edition_key'] as String? ?? '',
+    cover_i: map['cover_i'] as int? ?? 0,
+    ebook_access: map['ebook_access'] as String? ?? '',
+    edition_count: map['edition_count'] as int? ?? 0,
+    first_publish_year: map['first_publish_year'] as int? ?? 0,
+    has_fulltext: (map['has_fulltext'] as int? ?? 0) == 1, // ✅ int → bool
+    ia: _splitList(map['ia']),
+    ia_collection: _splitList(map['ia_collection']),
+    key: map['key'] as String? ?? '',
+    language: _splitList(map['language']),
+    lending_edition_s: map['lending_edition_s'] as String? ?? '',
     lending_identifier_s: map['lending_identifier_s'] as String? ?? '',
-    public_scan_b:        (map['public_scan_b'] as int? ?? 0) == 1, // ✅ int → bool
-    title:                map['title'] as String? ?? '',
-    id_standard_ebooks:   _splitList(map['id_standard_ebooks']),
+    public_scan_b: (map['public_scan_b'] as int? ?? 0) == 1, // ✅ int → bool
+    title: map['title'] as String? ?? '',
+    id_standard_ebooks: _splitList(map['id_standard_ebooks']),
+    is_favorite: (map['is_favorite'] as int) == 1,
   );
 
-
-
-
-Map<String, dynamic> toDb() => {
-    'author_key':          author_key.join(','),
-    'author_name':         author_name.join(','),
-    'cover_edition_key':    cover_edition_key,
-    'cover_i':              cover_i,
-    'ebook_access':         ebook_access,
-    'edition_count':        edition_count,
-    'first_publish_year':   first_publish_year,
-    'has_fulltext':         has_fulltext ? 1 : 0,   // ✅ bool → int
-    'ia':                   ia.join(','),
-    'ia_collection':        ia_collection.join(','),
-    'language':             language.join(','),
-    'lending_edition_s':    lending_edition_s,
+  Map<String, dynamic> toDb() => {
+    'author_key': author_key.join(','),
+    'author_name': author_name.join(','),
+    'cover_edition_key': cover_edition_key,
+    'cover_i': cover_i,
+    'ebook_access': ebook_access,
+    'edition_count': edition_count,
+    'first_publish_year': first_publish_year,
+    'has_fulltext': has_fulltext ? 1 : 0, // ✅ bool → int
+    'ia': ia.join(','),
+    'ia_collection': ia_collection.join(','),
+    'language': language.join(','),
+    'lending_edition_s': lending_edition_s,
     'lending_identifier_s': lending_identifier_s,
-    'public_scan_b':        public_scan_b ? 1 : 0,  // ✅ bool → int
-    'title':                title,
-    'id_standard_ebooks':   id_standard_ebooks.join(','),
+    'key': key,
+    'public_scan_b': public_scan_b ? 1 : 0, // ✅ bool → int
+    'title': title,
+    'id_standard_ebooks': id_standard_ebooks.join(','),
+    'is_favorite': is_favorite ? 1 : 0,
   };
-
 }

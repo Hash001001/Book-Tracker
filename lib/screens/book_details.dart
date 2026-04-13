@@ -99,15 +99,18 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
 
                   ElevatedButton.icon(
                     onPressed: () async {
-                      var db = await DataBaseHelper.instance;
-                      var allRecords = await db.getAllBooks()
-                      .then((record){
-                        for (var book in record){
-                          print("book from db -> ${book.title}");
-                        }
-                      });
+                      await DataBaseHelper.instance
+                          .markBookAsFavorite(
+                            bookData.key,
+                            !bookData.is_favorite,
+                          )
+                          .then((onValue){
+                            setState(() {
+                              bookData.is_favorite = !bookData.is_favorite;
+                            });
+                          });
                     },
-                    icon: Icon(Icons.favorite),
+                    icon: Icon( bookData.is_favorite ?  Icons.favorite : Icons.favorite_border_outlined),
                     label: Text("Favorite"),
                   ),
                 ],
