@@ -19,6 +19,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
     final args =
         ModalRoute.of(context)?.settings.arguments as BookDetailArguments;
     final Docs bookData = args.bookData;
+    final bool isFromSavedScreen = args.isFromSavedscreen;
 
     return Scaffold(
       appBar: AppBar(
@@ -75,7 +76,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ElevatedButton(
+                  !isFromSavedScreen ? ElevatedButton(
                     onPressed: () async {
                       try {
                         int savedbook = await DataBaseHelper.instance.inserBook(
@@ -95,8 +96,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                       }
                     },
                     child: Text("Save"),
-                  ),
-
+                  ):
                   ElevatedButton.icon(
                     onPressed: () async {
                       await DataBaseHelper.instance
