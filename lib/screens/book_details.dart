@@ -110,8 +110,9 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                             });
                           });
                     },
-                    icon: Icon( bookData.is_favorite ?  Icons.favorite : Icons.favorite_border_outlined),
-                    label: Text("Favorite"),
+                    icon: Icon( bookData.is_favorite ?  Icons.favorite : Icons.favorite_border_outlined,
+                    color: bookData.is_favorite ? Colors.red:  null ),
+                    label: Text(bookData.is_favorite ? "Favorite" : "Add to favorite"),
                   ),
                 ],
               ),

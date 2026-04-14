@@ -74,7 +74,7 @@ class _SavedScreenState extends State<SavedScreen> {
                                   bookData.is_favorite
                                       ? Icons.favorite
                                       : Icons.favorite_border_outlined,
-                                  color: CupertinoColors.lightBackgroundGray,
+                                  color:bookData.is_favorite ? Colors.red : CupertinoColors.lightBackgroundGray,
                                 ),
                                 onPressed: () async {
                                   await DataBaseHelper.instance
@@ -92,7 +92,7 @@ class _SavedScreenState extends State<SavedScreen> {
                                       );
                                 },
                                 label: Text(
-                                  "Add to Favorite",
+                                  bookData.is_favorite ?  "Favorite" : "Add to Favorite",
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 style: ElevatedButton.styleFrom(
